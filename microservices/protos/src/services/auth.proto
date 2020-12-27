@@ -1,0 +1,14 @@
+syntax="proto3";
+package services;
+
+option go_package = "build/services";
+
+message AuthenticateRequest {
+	string username = 1;
+	string password = 2;
+}
+message AuthenticateResponse {}
+
+service AuthService {
+	rpc Authenticate(AuthenticateRequest) returns (AuthenticateResponse) {}
+}
