@@ -60,6 +60,9 @@ func (repo *repositoryPQ) Migrate(path string) error {
 		return err
 	}
 	if err := m.Up(); err != nil {
+		if err == migrate.ErrNoChange {
+			return nil
+		}
 		return err
 	}
 	return nil
