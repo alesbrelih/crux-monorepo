@@ -6,7 +6,10 @@ proto-go-plugin:
 
 protoc: proto-buffers proto-go-plugin
 
-run-authentication:
-	go run services/authentication/main.go
+authentication-run:
+	cd services/authentication/;go run main.go
+authentication-migration:
+	@echo "Enter migration name";
+	@read MIGRATION; migrate create -ext sql -dir services/authentication/db/migrations -seq $$MIGRATION
 
 .PHONY: proto-buffers proto-go-plugin protoc

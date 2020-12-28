@@ -3,12 +3,30 @@ package services;
 
 option go_package = "build/services";
 
+// auth messages
 message AuthenticateRequest {
 	string username = 1;
 	string password = 2;
 }
-message AuthenticateResponse {}
+message AuthenticateResponse {
+	string access = 1;
+	string refresh = 2;
+}
+
+// refresh messages
+message RefreshTokenRequest {
+	string refresh = 1;
+}
+
+// don't want to join into same response
+// because coupling might introduce problems
+message RefreshTokenResponse {
+	string access = 1;
+	string refresh = 2;
+}
+
 
 service AuthService {
 	rpc Authenticate(AuthenticateRequest) returns (AuthenticateResponse) {}
+	rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse) {}
 }
