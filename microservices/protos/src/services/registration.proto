@@ -1,0 +1,29 @@
+syntax="proto3";
+package services;
+
+option go_package = "build/services";
+
+// register messages
+message RegisterRequest {
+	string username = 1;
+	string email = 2;
+	string name = 3;
+	string surname = 4;
+}
+message RegisterResponse {
+	string uuid = 1;
+}
+
+// confirm registration messages
+message ConfirmRegistrationRequest {
+	string uuid = 1;
+	string password = 2;
+	string confirm_password = 3;
+}
+message ConfirmRegistrationResponse {
+}
+
+service RegistrationService {
+	rpc Register(RegisterRequest) returns (RegisterResponse) {}
+	rpc ConfirmRegistration(ConfirmRegistrationRequest) returns (ConfirmRegistrationResponse) {}
+}

@@ -2,8 +2,8 @@ package repository
 
 import (
 	"context"
-	"database/sql"
 
+	"github.com/alesbrelih/crux-monorepo/microservices/internal/repository_connect"
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
@@ -22,40 +22,24 @@ type User struct {
 
 func NewRepository(postgresDsn string) Repository {
 	return &repositoryPQ{
-		dsn: postgresDsn,
+		conn: repository_connect.NewRepositoryConnect(postgresDsn),
 	}
 }
 
 type Repository interface {
-	connect() *sql.DB
 	GetUserByUsername(ctx context.Context, username string) (*User, error)
 	HasAccess(ctx context.Context, id int64) (bool, error)
 	Migrate(path string) error
 }
 
 type repositoryPQ struct {
-	dsn string
-}
-
-func (d *repositoryPQ) connect() *sql.DB {
-
-	db, err := sql.Open("postgres", d.dsn)
-	if err != nil {
-		panic(err)
-	}
-
-	err = db.Ping()
-	if err != nil {
-		panic(err)
-	}
-
-	return db
+	conn repository_connect.RepositoryConnect
 }
 
 func (repo *repositoryPQ) Migrate(path string) error {
 	m, err := migrate.New(
 		"file://"+path,
-		repo.dsn)
+		repo.conn.GetDsn())
 	if err != nil {
 		return err
 	}
@@ -70,7 +54,7 @@ func (repo *repositoryPQ) Migrate(path string) error {
 
 // Username can be email or username
 func (repo *repositoryPQ) GetUserByUsername(ctx context.Context, username string) (*User, error) {
-	conn := repo.connect()
+	conn := repo.conn.Connect()
 	defer conn.Close()
 
 	q := `SELECT id, name, surname, username, 
@@ -87,7 +71,7 @@ func (repo *repositoryPQ) GetUserByUsername(ctx context.Context, username string
 }
 
 func (repo *repositoryPQ) HasAccess(ctx context.Context, id int64) (bool, error) {
-	conn := repo.connect()
+	conn := repo.conn.Connect()
 	defer conn.Close()
 
 	var active bool

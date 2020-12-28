@@ -5,35 +5,15 @@ import (
 	"os"
 	"path"
 
+	envConf "github.com/alesbrelih/crux-monorepo/microservices/config"
 	"github.com/alesbrelih/crux-monorepo/microservices/internal/start"
 	"github.com/alesbrelih/crux-monorepo/microservices/protos/build/services"
-	envConf "github.com/alesbrelih/crux-monorepo/microservices/services/authentication/config"
 	grpcAuth "github.com/alesbrelih/crux-monorepo/microservices/services/authentication/internal/grpc"
 	myJwt "github.com/alesbrelih/crux-monorepo/microservices/services/authentication/internal/my_jwt"
 	"github.com/alesbrelih/crux-monorepo/microservices/services/authentication/internal/repository"
-	"github.com/spf13/viper"
 
 	"google.golang.org/grpc"
 )
-
-const (
-	port  = ":9000"
-	debug = true
-)
-
-func getEnvConfig(path, file string) *envConf.Enviroment {
-	// get enviroment variables
-	var envConf envConf.Enviroment
-	viper.SetConfigFile(file)
-	viper.AddConfigPath(path)
-	if err := viper.ReadInConfig(); err != nil {
-		log.Fatalf("Failed to read enviroment config. Err: %v", err)
-	}
-	if err := viper.Unmarshal(&envConf); err != nil {
-		log.Fatalf("Failed to unmarshal enviroment variables. Err: %v", err)
-	}
-	return &envConf
-}
 
 func main() {
 
@@ -42,7 +22,7 @@ func main() {
 		log.Fatalf("Error getting working directory. Error: %v", err)
 	}
 	log.Println(cwd)
-	envConf := getEnvConfig(cwd, "dev.env")
+	envConf := envConf.GetEnvConfig(cwd, "dev.env")
 
 	start.SetUpGrpc(envConf, func(server *grpc.Server) {
 		// set repository and migrate db

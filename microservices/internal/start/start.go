@@ -7,7 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/alesbrelih/crux-monorepo/microservices/services/authentication/config"
+	"github.com/alesbrelih/crux-monorepo/microservices/config"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
