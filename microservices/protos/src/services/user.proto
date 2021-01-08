@@ -1,0 +1,26 @@
+syntax="proto3";
+package services;
+
+option go_package = "build/services";
+
+// create user
+message CreateUserRequest {
+	string username = 1;
+	string email = 2;
+	string password = 3;
+}
+message CreateUserResponse {
+	string id = 1;
+}
+
+// delete user
+message DeleteUserRequest {
+	string id = 1;
+}
+message DeleteUserResponse {
+}
+
+service UserService {
+	rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {}
+	rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse) {}
+}

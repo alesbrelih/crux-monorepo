@@ -21,7 +21,6 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error getting working directory. Error: %v", err)
 	}
-	log.Println(cwd)
 	envConf := envConf.GetEnvConfig(cwd, "dev.env")
 
 	start.SetUpGrpc(envConf, func(server *grpc.Server) {

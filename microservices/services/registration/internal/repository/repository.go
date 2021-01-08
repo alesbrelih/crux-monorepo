@@ -11,14 +11,11 @@ type UserInvite struct {
 	Surname  string
 	Email    string
 	Username string
-	Password string
 }
 
 func NewUserInviteFromRegistration(id string, registration *services.RegisterRequest) *UserInvite {
 	return &UserInvite{
 		Id:       id,
-		Name:     registration.GetName(),
-		Surname:  registration.GetSurname(),
 		Email:    registration.GetEmail(),
 		Username: registration.GetUsername(),
 	}

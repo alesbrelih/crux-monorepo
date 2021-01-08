@@ -10,7 +10,7 @@ func GetStructStringValues(i interface{}) []string {
 	values := []string{}
 
 	value := reflect.ValueOf(i)
-	if value.Kind() == reflect.Struct {
+	if value.Kind() != reflect.Struct {
 		return values
 	}
 

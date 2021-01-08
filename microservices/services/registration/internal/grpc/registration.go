@@ -9,6 +9,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/hashicorp/go-hclog"
 	"github.com/trustelem/zxcvbn"
+	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -56,4 +57,32 @@ func (s *registrationServiceServer) ConfirmRegistration(ctx context.Context, req
 	if res := zxcvbn.PasswordStrength(request.Password, fields); res.Score < 3 {
 		return nil, status.Error(codes.InvalidArgument, "Password strength is too low")
 	}
+
+	if request.Password != request.ConfirmPassword {
+		return nil, status.Error(codes.InvalidArgument, "Passwords must match")
+	}
+
+	// TODO: refactor in something unittestable
+	conn, err := grpc.Dial("")
+	if err != nil {
+		s.log.Error("GRPC: ConfirmRegistration error connecting to user gprc. Error: %v", err)
+		return nil, status.Error(codes.Internal, "Internal server error")
+	}
+	defer conn.Close()
+
+	createUserRequest := &services.CreateUserRequest{
+		Username: userInvite.Username,
+		Email:    userInvite.Email,
+		Password: request.Password,
+	}
+	c := services.NewUserServiceClient(conn)
+	resp, err := c.CreateUser(ctx, createUserRequest)
+	if err != nil {
+		s.log.Error("GRPC: ConfirmRegistration, error from user.CreateUser. Error: %s", err.Error())
+		return nil, status.Error(codes.Internal, "Internal server error")
+	}
+
+	return &services.ConfirmRegistrationResponse{
+		Id: resp.GetId(),
+	}, nil
 }

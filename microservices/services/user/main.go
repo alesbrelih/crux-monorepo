@@ -6,9 +6,10 @@ import (
 
 	envConf "github.com/alesbrelih/crux-monorepo/microservices/config"
 	"github.com/alesbrelih/crux-monorepo/microservices/internal/start"
+	"github.com/alesbrelih/crux-monorepo/microservices/pkg"
 	"github.com/alesbrelih/crux-monorepo/microservices/protos/build/services"
-	grpcRegistration "github.com/alesbrelih/crux-monorepo/microservices/services/registration/internal/grpc"
-	"github.com/alesbrelih/crux-monorepo/microservices/services/registration/internal/repository"
+	grpcUser "github.com/alesbrelih/crux-monorepo/microservices/services/user/internal/grpc"
+	"github.com/alesbrelih/crux-monorepo/microservices/services/user/internal/repository"
 	"github.com/hashicorp/go-hclog"
 
 	"google.golang.org/grpc"
@@ -21,19 +22,19 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error getting working directory. Error: %v", err)
 	}
-	log.Println(cwd)
 	envConf := envConf.GetEnvConfig(cwd, "dev.env")
 
 	start.SetUpGrpc(envConf, func(server *grpc.Server) {
 
 		repo := repository.NewRepository(envConf.DatabaseUrl)
+		passUtil := pkg.NewPasswordUtil()
 		logger := hclog.New(&hclog.LoggerOptions{
-			Name:  "registration",
+			Name:  "user",
 			Level: hclog.LevelFromString(envConf.LogLevel), // todo set from env
 		})
-		grpcService := grpcRegistration.NewRegistrationService(logger, repo)
+		grpcService := grpcUser.NewUserService(logger, passUtil, repo)
 
-		services.RegisterRegistrationServiceServer(server, grpcService)
+		services.RegisterUserServiceServer(server, grpcService)
 	})
 
 }

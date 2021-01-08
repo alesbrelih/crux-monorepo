@@ -54,8 +54,12 @@ func (repo *repositoryPQ) Migrate(path string) error {
 
 // Username can be email or username
 func (repo *repositoryPQ) GetUserByUsername(ctx context.Context, username string) (*User, error) {
-	conn := repo.conn.Connect()
+	conn, err := repo.conn.Connect()
 	defer conn.Close()
+
+	if err != nil {
+		return nil, err
+	}
 
 	q := `SELECT id, name, surname, username, 
 				email, password
@@ -71,8 +75,12 @@ func (repo *repositoryPQ) GetUserByUsername(ctx context.Context, username string
 }
 
 func (repo *repositoryPQ) HasAccess(ctx context.Context, id int64) (bool, error) {
-	conn := repo.conn.Connect()
+	conn, err := repo.conn.Connect()
 	defer conn.Close()
+
+	if err != nil {
+		return false, err
+	}
 
 	var active bool
 	q := `SELECT COUNT(*) > 0 FROM crux_user WHERE id = $1 AND active = true`

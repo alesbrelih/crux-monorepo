@@ -14,6 +14,7 @@ type Enviroment struct {
 	JwtSecret     string        `mapstructure:"JWT_SECRET"`
 	JwtAccessExp  time.Duration `mapstructure:"JWT_ACCESS_EXPIRATION"`
 	JwtRefreshExt time.Duration `mapstructure:"JWT_REFRESH_EXPIRATION"`
+	LogLevel      string        `mapstructure:"LOG_LEVEL"`
 }
 
 // TODO: maybe struct embed different types?

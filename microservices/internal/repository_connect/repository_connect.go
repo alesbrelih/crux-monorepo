@@ -9,7 +9,7 @@ func NewRepositoryConnect(dsn string) RepositoryConnect {
 }
 
 type RepositoryConnect interface {
-	Connect() *sql.DB
+	Connect() (*sql.DB, error)
 	GetDsn() string
 }
 
