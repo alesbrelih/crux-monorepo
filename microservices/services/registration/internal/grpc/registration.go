@@ -3,27 +3,29 @@ package grpc
 import (
 	"context"
 
+	"github.com/alesbrelih/crux-monorepo/microservices/internal/grpc_clients"
 	"github.com/alesbrelih/crux-monorepo/microservices/pkg"
 	"github.com/alesbrelih/crux-monorepo/microservices/protos/build/services"
 	"github.com/alesbrelih/crux-monorepo/microservices/services/registration/internal/repository"
 	"github.com/google/uuid"
 	"github.com/hashicorp/go-hclog"
 	"github.com/trustelem/zxcvbn"
-	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
 
-func NewRegistrationService(log hclog.Logger, repo repository.Repository) services.RegistrationServiceServer {
+func NewRegistrationService(log hclog.Logger, repo repository.Repository, userClient grpc_clients.UserClient) services.RegistrationServiceServer {
 	return &registrationServiceServer{
-		log:  log,
-		repo: repo,
+		log:        log,
+		repo:       repo,
+		userClient: userClient,
 	}
 }
 
 type registrationServiceServer struct {
-	log  hclog.Logger
-	repo repository.Repository
+	log        hclog.Logger
+	repo       repository.Repository
+	userClient grpc_clients.UserClient
 	services.UnimplementedRegistrationServiceServer
 }
 
@@ -62,27 +64,23 @@ func (s *registrationServiceServer) ConfirmRegistration(ctx context.Context, req
 		return nil, status.Error(codes.InvalidArgument, "Passwords must match")
 	}
 
-	// TODO: refactor in something unittestable
-	conn, err := grpc.Dial("")
+	// call user microservice to create user
+	id, err := s.userClient.CreateUser(ctx, userInvite.Username, userInvite.Email, request.Password)
 	if err != nil {
-		s.log.Error("GRPC: ConfirmRegistration error connecting to user gprc. Error: %v", err)
-		return nil, status.Error(codes.Internal, "Internal server error")
-	}
-	defer conn.Close()
+		if grpcErr, ok := status.FromError(err); ok {
+			// handled grpc error from user microservice -> forwarding it
+			// maybe this can be simplyfied?
+			s.log.Error("GRPC: ConfirmRegistration GRPC error calling CreateUser: %v", err.Error())
+			return nil, status.Error(grpcErr.Code(), grpcErr.Message())
+		}
 
-	createUserRequest := &services.CreateUserRequest{
-		Username: userInvite.Username,
-		Email:    userInvite.Email,
-		Password: request.Password,
-	}
-	c := services.NewUserServiceClient(conn)
-	resp, err := c.CreateUser(ctx, createUserRequest)
-	if err != nil {
-		s.log.Error("GRPC: ConfirmRegistration, error from user.CreateUser. Error: %s", err.Error())
+		// unexpected server error
+		s.log.Error("GRPC: ConfirmRegistration server error calling CreateUser: %v", err.Error())
 		return nil, status.Error(codes.Internal, "Internal server error")
 	}
 
 	return &services.ConfirmRegistrationResponse{
-		Id: resp.GetId(),
+		Id: id,
 	}, nil
+
 }
