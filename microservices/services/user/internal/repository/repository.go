@@ -117,6 +117,7 @@ func (repo *repositoryPQ) HandleFriendInvite(ctx context.Context, userOne, userT
 		return errors.Wrap(err, "HandleFriendInvite - DB query social network error")
 	}
 
+	// TODO: rework this -> using different table for invites!
 	if isAccepted {
 		return repo.acceptFriendInvite(ctx, conn, id)
 	}
@@ -125,7 +126,7 @@ func (repo *repositoryPQ) HandleFriendInvite(ctx context.Context, userOne, userT
 }
 
 func (repo *repositoryPQ) acceptFriendInvite(ctx context.Context, conn *sql.DB, id int64) error {
-	q := "UPDATE social_network SET status = 'ACCEPTED', date_accepted = (NOW() at time zone 'utc') WHERE id  = $1"
+	q := "UPDATE social_network SET social_status = 'ACCEPTED', date_accepted = (NOW() at time zone 'utc') WHERE id  = $1"
 	res, err := conn.ExecContext(ctx, q, id)
 	if err != nil {
 		return errors.Wrap(err, "acceptFriendInvite - error saving accept to db")
