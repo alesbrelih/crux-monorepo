@@ -20,7 +20,40 @@ message DeleteUserRequest {
 message DeleteUserResponse {
 }
 
+// befriending user
+message BefriendUserRequest {
+	// this represents user we want to befriend
+	// current user id will be retrieved from jwt
+	string user_id = 1;
+}
+message BefriendUserResponse {}
+
+// unfriending user
+message UnfriendUserRequest {
+	string user_id = 1;
+}
+message UnfriendUserResponse {}
+
+// user can accept / decline invitation from another user (user_id)
+message HandleFriendInviteRequest {
+	string user_id = 1;
+
+	enum ResponseType {
+		ACCEPT = 0;
+		DECLINE = 1;
+	}
+	ResponseType response = 2;
+}
+
+// user can accept / decline invitation
+message HandleFriendInviteResponse { }
+
+
+
 service UserService {
 	rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {}
 	rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse) {}
+	rpc BefriendUser(BefriendUserRequest) returns (BefriendUserResponse) {}
+	rpc UnfiendUser(UnfriendUserRequest) returns (UnfriendUserResponse) {}
+	rpc HandleFriendInvite(HandleFriendInviteRequest) returns (HandleFriendInviteResponse) {}
 }

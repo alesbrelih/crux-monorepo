@@ -19,6 +19,9 @@ const _ = grpc.SupportPackageIsVersion7
 type UserServiceClient interface {
 	CreateUser(ctx context.Context, in *CreateUserRequest, opts ...grpc.CallOption) (*CreateUserResponse, error)
 	DeleteUser(ctx context.Context, in *DeleteUserRequest, opts ...grpc.CallOption) (*DeleteUserResponse, error)
+	BefriendUser(ctx context.Context, in *BefriendUserRequest, opts ...grpc.CallOption) (*BefriendUserResponse, error)
+	UnfiendUser(ctx context.Context, in *UnfriendUserRequest, opts ...grpc.CallOption) (*UnfriendUserResponse, error)
+	HandleFriendInvite(ctx context.Context, in *HandleFriendInviteRequest, opts ...grpc.CallOption) (*HandleFriendInviteResponse, error)
 }
 
 type userServiceClient struct {
@@ -47,12 +50,42 @@ func (c *userServiceClient) DeleteUser(ctx context.Context, in *DeleteUserReques
 	return out, nil
 }
 
+func (c *userServiceClient) BefriendUser(ctx context.Context, in *BefriendUserRequest, opts ...grpc.CallOption) (*BefriendUserResponse, error) {
+	out := new(BefriendUserResponse)
+	err := c.cc.Invoke(ctx, "/services.UserService/BefriendUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) UnfiendUser(ctx context.Context, in *UnfriendUserRequest, opts ...grpc.CallOption) (*UnfriendUserResponse, error) {
+	out := new(UnfriendUserResponse)
+	err := c.cc.Invoke(ctx, "/services.UserService/UnfiendUser", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userServiceClient) HandleFriendInvite(ctx context.Context, in *HandleFriendInviteRequest, opts ...grpc.CallOption) (*HandleFriendInviteResponse, error) {
+	out := new(HandleFriendInviteResponse)
+	err := c.cc.Invoke(ctx, "/services.UserService/HandleFriendInvite", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserServiceServer is the server API for UserService service.
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility
 type UserServiceServer interface {
 	CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error)
 	DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserResponse, error)
+	BefriendUser(context.Context, *BefriendUserRequest) (*BefriendUserResponse, error)
+	UnfiendUser(context.Context, *UnfriendUserRequest) (*UnfriendUserResponse, error)
+	HandleFriendInvite(context.Context, *HandleFriendInviteRequest) (*HandleFriendInviteResponse, error)
 	mustEmbedUnimplementedUserServiceServer()
 }
 
@@ -65,6 +98,15 @@ func (UnimplementedUserServiceServer) CreateUser(context.Context, *CreateUserReq
 }
 func (UnimplementedUserServiceServer) DeleteUser(context.Context, *DeleteUserRequest) (*DeleteUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteUser not implemented")
+}
+func (UnimplementedUserServiceServer) BefriendUser(context.Context, *BefriendUserRequest) (*BefriendUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BefriendUser not implemented")
+}
+func (UnimplementedUserServiceServer) UnfiendUser(context.Context, *UnfriendUserRequest) (*UnfriendUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UnfiendUser not implemented")
+}
+func (UnimplementedUserServiceServer) HandleFriendInvite(context.Context, *HandleFriendInviteRequest) (*HandleFriendInviteResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HandleFriendInvite not implemented")
 }
 func (UnimplementedUserServiceServer) mustEmbedUnimplementedUserServiceServer() {}
 
@@ -115,6 +157,60 @@ func _UserService_DeleteUser_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserService_BefriendUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BefriendUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).BefriendUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/services.UserService/BefriendUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).BefriendUser(ctx, req.(*BefriendUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_UnfiendUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UnfriendUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).UnfiendUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/services.UserService/UnfiendUser",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).UnfiendUser(ctx, req.(*UnfriendUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserService_HandleFriendInvite_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(HandleFriendInviteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserServiceServer).HandleFriendInvite(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/services.UserService/HandleFriendInvite",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserServiceServer).HandleFriendInvite(ctx, req.(*HandleFriendInviteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _UserService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "services.UserService",
 	HandlerType: (*UserServiceServer)(nil),
@@ -126,6 +222,18 @@ var _UserService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteUser",
 			Handler:    _UserService_DeleteUser_Handler,
+		},
+		{
+			MethodName: "BefriendUser",
+			Handler:    _UserService_BefriendUser_Handler,
+		},
+		{
+			MethodName: "UnfiendUser",
+			Handler:    _UserService_UnfiendUser_Handler,
+		},
+		{
+			MethodName: "HandleFriendInvite",
+			Handler:    _UserService_HandleFriendInvite_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -2,6 +2,7 @@ package grpc
 
 import (
 	"context"
+	"database/sql"
 
 	"github.com/alesbrelih/crux-monorepo/microservices/pkg"
 	"github.com/alesbrelih/crux-monorepo/microservices/protos/build/services"
@@ -72,4 +73,63 @@ func (s *userServiceServer) DeleteUser(ctx context.Context, request *services.De
 	}
 
 	return &services.DeleteUserResponse{}, nil
+}
+
+func (s *userServiceServer) BefriendUser(ctx context.Context, request *services.BefriendUserRequest) (*services.BefriendUserResponse, error) {
+
+	// TODO: do we need log?
+
+	currentUserId := "mocked-id" // this will be retrieved from jwt
+
+	err := s.repo.BefriendUser(ctx, currentUserId, request.GetUserId())
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, status.Error(codes.InvalidArgument, "No such user")
+		}
+		s.log.Error("GRPC: BefriendUser - failed to create befriend invite. Error: %s", err.Error())
+		return nil, status.Error(codes.Internal, "Internal server error")
+	}
+
+	// TODO: communicate with services that returns notification to other user about invite
+	// if this wont be done with pooling
+
+	return &services.BefriendUserResponse{}, nil
+}
+
+func (s *userServiceServer) UnfriendUser(ctx context.Context, request *services.UnfriendUserRequest) (*services.UnfiendUserResponse, error) {
+
+	currentUserId := "mocked-id" // this will be retrieved from jwt
+
+	err := s.repo.UnfriendUser(ctx, currentUserId, request.GetUserId())
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, status.Error(codes.InvalidArgument, "No such user")
+		}
+		s.log.Error("GRPC: UnfriendUser - failed to remove friend. Error: %s", err.Error())
+		return nil, status.Error(codes.Internal, "Internal server error")
+	}
+
+	// TODO: communicate with services that returns notification to other user about invite
+	// if this wont be done with pooling
+
+	return &services.UnfriendUserResponse{}, nil
+}
+
+func (s *userServiceServer) HandleFriendInvite(ctx context.Context, request *services.HandleFriendInviteRequest) (*services.HandleFriendInviteResponse, error) {
+
+	currentUserId := "mocked-id" // this will be retrieved from jwt
+
+	err := s.repo.HandleFriendInvite(ctx, currentUserId, request.GetUserId(), request.GetResponse() == services.HandleFriendInviteRequest_ACCEPT)
+
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, status.Error(codes.InvalidArgument, "No such user")
+		}
+		s.log.Error("GRPC: HandleFriendInvite - failed to handle friend invite. Error: %s", err.Error())
+		return nil, status.Error(codes.Internal, "Internal server error")
+	}
+
+	return &services.HandleFriendInviteResponse{}, nil
 }

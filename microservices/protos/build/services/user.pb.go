@@ -20,6 +20,52 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type HandleFriendInviteRequest_ResponseType int32
+
+const (
+	HandleFriendInviteRequest_ACCEPT  HandleFriendInviteRequest_ResponseType = 0
+	HandleFriendInviteRequest_DECLINE HandleFriendInviteRequest_ResponseType = 1
+)
+
+// Enum value maps for HandleFriendInviteRequest_ResponseType.
+var (
+	HandleFriendInviteRequest_ResponseType_name = map[int32]string{
+		0: "ACCEPT",
+		1: "DECLINE",
+	}
+	HandleFriendInviteRequest_ResponseType_value = map[string]int32{
+		"ACCEPT":  0,
+		"DECLINE": 1,
+	}
+)
+
+func (x HandleFriendInviteRequest_ResponseType) Enum() *HandleFriendInviteRequest_ResponseType {
+	p := new(HandleFriendInviteRequest_ResponseType)
+	*p = x
+	return p
+}
+
+func (x HandleFriendInviteRequest_ResponseType) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (HandleFriendInviteRequest_ResponseType) Descriptor() protoreflect.EnumDescriptor {
+	return file_services_user_proto_enumTypes[0].Descriptor()
+}
+
+func (HandleFriendInviteRequest_ResponseType) Type() protoreflect.EnumType {
+	return &file_services_user_proto_enumTypes[0]
+}
+
+func (x HandleFriendInviteRequest_ResponseType) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use HandleFriendInviteRequest_ResponseType.Descriptor instead.
+func (HandleFriendInviteRequest_ResponseType) EnumDescriptor() ([]byte, []int) {
+	return file_services_user_proto_rawDescGZIP(), []int{8, 0}
+}
+
 // create user
 type CreateUserRequest struct {
 	state         protoimpl.MessageState
@@ -217,6 +263,275 @@ func (*DeleteUserResponse) Descriptor() ([]byte, []int) {
 	return file_services_user_proto_rawDescGZIP(), []int{3}
 }
 
+// befriending user
+type BefriendUserRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	// this represents user we want to befriend
+	// current user id will be retrieved from jwt
+	UserId string `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+}
+
+func (x *BefriendUserRequest) Reset() {
+	*x = BefriendUserRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_services_user_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *BefriendUserRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BefriendUserRequest) ProtoMessage() {}
+
+func (x *BefriendUserRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_services_user_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BefriendUserRequest.ProtoReflect.Descriptor instead.
+func (*BefriendUserRequest) Descriptor() ([]byte, []int) {
+	return file_services_user_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *BefriendUserRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+type BefriendUserResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *BefriendUserResponse) Reset() {
+	*x = BefriendUserResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_services_user_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *BefriendUserResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BefriendUserResponse) ProtoMessage() {}
+
+func (x *BefriendUserResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_services_user_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BefriendUserResponse.ProtoReflect.Descriptor instead.
+func (*BefriendUserResponse) Descriptor() ([]byte, []int) {
+	return file_services_user_proto_rawDescGZIP(), []int{5}
+}
+
+// unfriending user
+type UnfriendUserRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	UserId string `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+}
+
+func (x *UnfriendUserRequest) Reset() {
+	*x = UnfriendUserRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_services_user_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UnfriendUserRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UnfriendUserRequest) ProtoMessage() {}
+
+func (x *UnfriendUserRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_services_user_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UnfriendUserRequest.ProtoReflect.Descriptor instead.
+func (*UnfriendUserRequest) Descriptor() ([]byte, []int) {
+	return file_services_user_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *UnfriendUserRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+type UnfriendUserResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *UnfriendUserResponse) Reset() {
+	*x = UnfriendUserResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_services_user_proto_msgTypes[7]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UnfriendUserResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UnfriendUserResponse) ProtoMessage() {}
+
+func (x *UnfriendUserResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_services_user_proto_msgTypes[7]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UnfriendUserResponse.ProtoReflect.Descriptor instead.
+func (*UnfriendUserResponse) Descriptor() ([]byte, []int) {
+	return file_services_user_proto_rawDescGZIP(), []int{7}
+}
+
+// user can accept / decline invitation from another user (user_id)
+type HandleFriendInviteRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	UserId   string                                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Response HandleFriendInviteRequest_ResponseType `protobuf:"varint,2,opt,name=response,proto3,enum=services.HandleFriendInviteRequest_ResponseType" json:"response,omitempty"`
+}
+
+func (x *HandleFriendInviteRequest) Reset() {
+	*x = HandleFriendInviteRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_services_user_proto_msgTypes[8]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *HandleFriendInviteRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HandleFriendInviteRequest) ProtoMessage() {}
+
+func (x *HandleFriendInviteRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_services_user_proto_msgTypes[8]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HandleFriendInviteRequest.ProtoReflect.Descriptor instead.
+func (*HandleFriendInviteRequest) Descriptor() ([]byte, []int) {
+	return file_services_user_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *HandleFriendInviteRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *HandleFriendInviteRequest) GetResponse() HandleFriendInviteRequest_ResponseType {
+	if x != nil {
+		return x.Response
+	}
+	return HandleFriendInviteRequest_ACCEPT
+}
+
+// user can accept / decline invitation
+type HandleFriendInviteResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+}
+
+func (x *HandleFriendInviteResponse) Reset() {
+	*x = HandleFriendInviteResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_services_user_proto_msgTypes[9]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *HandleFriendInviteResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*HandleFriendInviteResponse) ProtoMessage() {}
+
+func (x *HandleFriendInviteResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_services_user_proto_msgTypes[9]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use HandleFriendInviteResponse.ProtoReflect.Descriptor instead.
+func (*HandleFriendInviteResponse) Descriptor() ([]byte, []int) {
+	return file_services_user_proto_rawDescGZIP(), []int{9}
+}
+
 var File_services_user_proto protoreflect.FileDescriptor
 
 var file_services_user_proto_rawDesc = []byte{
@@ -234,16 +549,54 @@ var file_services_user_proto_rawDesc = []byte{
 	0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x0e, 0x0a,
 	0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x22, 0x14, 0x0a,
 	0x12, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f,
-	0x6e, 0x73, 0x65, 0x32, 0xa3, 0x01, 0x0a, 0x0b, 0x55, 0x73, 0x65, 0x72, 0x53, 0x65, 0x72, 0x76,
-	0x69, 0x63, 0x65, 0x12, 0x49, 0x0a, 0x0a, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x55, 0x73, 0x65,
-	0x72, 0x12, 0x1b, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x43, 0x72, 0x65,
-	0x61, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1c,
-	0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65,
-	0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x49,
-	0x0a, 0x0a, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x12, 0x1b, 0x2e, 0x73,
-	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x55, 0x73,
-	0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1c, 0x2e, 0x73, 0x65, 0x72, 0x76,
-	0x69, 0x63, 0x65, 0x73, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52,
+	0x6e, 0x73, 0x65, 0x22, 0x2e, 0x0a, 0x13, 0x42, 0x65, 0x66, 0x72, 0x69, 0x65, 0x6e, 0x64, 0x55,
+	0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x17, 0x0a, 0x07, 0x75, 0x73,
+	0x65, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x75, 0x73, 0x65,
+	0x72, 0x49, 0x64, 0x22, 0x16, 0x0a, 0x14, 0x42, 0x65, 0x66, 0x72, 0x69, 0x65, 0x6e, 0x64, 0x55,
+	0x73, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x2e, 0x0a, 0x13, 0x55,
+	0x6e, 0x66, 0x72, 0x69, 0x65, 0x6e, 0x64, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x12, 0x17, 0x0a, 0x07, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x22, 0x16, 0x0a, 0x14, 0x55,
+	0x6e, 0x66, 0x72, 0x69, 0x65, 0x6e, 0x64, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x22, 0xab, 0x01, 0x0a, 0x19, 0x48, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x46, 0x72,
+	0x69, 0x65, 0x6e, 0x64, 0x49, 0x6e, 0x76, 0x69, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x12, 0x17, 0x0a, 0x07, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01,
+	0x28, 0x09, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x12, 0x4c, 0x0a, 0x08, 0x72, 0x65,
+	0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x30, 0x2e, 0x73,
+	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x48, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x46, 0x72,
+	0x69, 0x65, 0x6e, 0x64, 0x49, 0x6e, 0x76, 0x69, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x2e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x54, 0x79, 0x70, 0x65, 0x52, 0x08,
+	0x72, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x27, 0x0a, 0x0c, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x54, 0x79, 0x70, 0x65, 0x12, 0x0a, 0x0a, 0x06, 0x41, 0x43, 0x43, 0x45,
+	0x50, 0x54, 0x10, 0x00, 0x12, 0x0b, 0x0a, 0x07, 0x44, 0x45, 0x43, 0x4c, 0x49, 0x4e, 0x45, 0x10,
+	0x01, 0x22, 0x1c, 0x0a, 0x1a, 0x48, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x46, 0x72, 0x69, 0x65, 0x6e,
+	0x64, 0x49, 0x6e, 0x76, 0x69, 0x74, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x32,
+	0xa7, 0x03, 0x0a, 0x0b, 0x55, 0x73, 0x65, 0x72, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12,
+	0x49, 0x0a, 0x0a, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x12, 0x1b, 0x2e,
+	0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x55,
+	0x73, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1c, 0x2e, 0x73, 0x65, 0x72,
+	0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72,
+	0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x49, 0x0a, 0x0a, 0x44, 0x65,
+	0x6c, 0x65, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x12, 0x1b, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69,
+	0x63, 0x65, 0x73, 0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1c, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73,
+	0x2e, 0x44, 0x65, 0x6c, 0x65, 0x74, 0x65, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70, 0x6f,
+	0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x4f, 0x0a, 0x0c, 0x42, 0x65, 0x66, 0x72, 0x69, 0x65, 0x6e,
+	0x64, 0x55, 0x73, 0x65, 0x72, 0x12, 0x1d, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73,
+	0x2e, 0x42, 0x65, 0x66, 0x72, 0x69, 0x65, 0x6e, 0x64, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x1a, 0x1e, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e,
+	0x42, 0x65, 0x66, 0x72, 0x69, 0x65, 0x6e, 0x64, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x4e, 0x0a, 0x0b, 0x55, 0x6e, 0x66, 0x69, 0x65, 0x6e,
+	0x64, 0x55, 0x73, 0x65, 0x72, 0x12, 0x1d, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73,
+	0x2e, 0x55, 0x6e, 0x66, 0x72, 0x69, 0x65, 0x6e, 0x64, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x71,
+	0x75, 0x65, 0x73, 0x74, 0x1a, 0x1e, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e,
+	0x55, 0x6e, 0x66, 0x72, 0x69, 0x65, 0x6e, 0x64, 0x55, 0x73, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x61, 0x0a, 0x12, 0x48, 0x61, 0x6e, 0x64, 0x6c, 0x65,
+	0x46, 0x72, 0x69, 0x65, 0x6e, 0x64, 0x49, 0x6e, 0x76, 0x69, 0x74, 0x65, 0x12, 0x23, 0x2e, 0x73,
+	0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x48, 0x61, 0x6e, 0x64, 0x6c, 0x65, 0x46, 0x72,
+	0x69, 0x65, 0x6e, 0x64, 0x49, 0x6e, 0x76, 0x69, 0x74, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x24, 0x2e, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x2e, 0x48, 0x61, 0x6e,
+	0x64, 0x6c, 0x65, 0x46, 0x72, 0x69, 0x65, 0x6e, 0x64, 0x49, 0x6e, 0x76, 0x69, 0x74, 0x65, 0x52,
 	0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x42, 0x10, 0x5a, 0x0e, 0x62, 0x75, 0x69,
 	0x6c, 0x64, 0x2f, 0x73, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x73, 0x62, 0x06, 0x70, 0x72, 0x6f,
 	0x74, 0x6f, 0x33,
@@ -261,23 +614,38 @@ func file_services_user_proto_rawDescGZIP() []byte {
 	return file_services_user_proto_rawDescData
 }
 
-var file_services_user_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_services_user_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_services_user_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_services_user_proto_goTypes = []interface{}{
-	(*CreateUserRequest)(nil),  // 0: services.CreateUserRequest
-	(*CreateUserResponse)(nil), // 1: services.CreateUserResponse
-	(*DeleteUserRequest)(nil),  // 2: services.DeleteUserRequest
-	(*DeleteUserResponse)(nil), // 3: services.DeleteUserResponse
+	(HandleFriendInviteRequest_ResponseType)(0), // 0: services.HandleFriendInviteRequest.ResponseType
+	(*CreateUserRequest)(nil),                   // 1: services.CreateUserRequest
+	(*CreateUserResponse)(nil),                  // 2: services.CreateUserResponse
+	(*DeleteUserRequest)(nil),                   // 3: services.DeleteUserRequest
+	(*DeleteUserResponse)(nil),                  // 4: services.DeleteUserResponse
+	(*BefriendUserRequest)(nil),                 // 5: services.BefriendUserRequest
+	(*BefriendUserResponse)(nil),                // 6: services.BefriendUserResponse
+	(*UnfriendUserRequest)(nil),                 // 7: services.UnfriendUserRequest
+	(*UnfriendUserResponse)(nil),                // 8: services.UnfriendUserResponse
+	(*HandleFriendInviteRequest)(nil),           // 9: services.HandleFriendInviteRequest
+	(*HandleFriendInviteResponse)(nil),          // 10: services.HandleFriendInviteResponse
 }
 var file_services_user_proto_depIdxs = []int32{
-	0, // 0: services.UserService.CreateUser:input_type -> services.CreateUserRequest
-	2, // 1: services.UserService.DeleteUser:input_type -> services.DeleteUserRequest
-	1, // 2: services.UserService.CreateUser:output_type -> services.CreateUserResponse
-	3, // 3: services.UserService.DeleteUser:output_type -> services.DeleteUserResponse
-	2, // [2:4] is the sub-list for method output_type
-	0, // [0:2] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	0,  // 0: services.HandleFriendInviteRequest.response:type_name -> services.HandleFriendInviteRequest.ResponseType
+	1,  // 1: services.UserService.CreateUser:input_type -> services.CreateUserRequest
+	3,  // 2: services.UserService.DeleteUser:input_type -> services.DeleteUserRequest
+	5,  // 3: services.UserService.BefriendUser:input_type -> services.BefriendUserRequest
+	7,  // 4: services.UserService.UnfiendUser:input_type -> services.UnfriendUserRequest
+	9,  // 5: services.UserService.HandleFriendInvite:input_type -> services.HandleFriendInviteRequest
+	2,  // 6: services.UserService.CreateUser:output_type -> services.CreateUserResponse
+	4,  // 7: services.UserService.DeleteUser:output_type -> services.DeleteUserResponse
+	6,  // 8: services.UserService.BefriendUser:output_type -> services.BefriendUserResponse
+	8,  // 9: services.UserService.UnfiendUser:output_type -> services.UnfriendUserResponse
+	10, // 10: services.UserService.HandleFriendInvite:output_type -> services.HandleFriendInviteResponse
+	6,  // [6:11] is the sub-list for method output_type
+	1,  // [1:6] is the sub-list for method input_type
+	1,  // [1:1] is the sub-list for extension type_name
+	1,  // [1:1] is the sub-list for extension extendee
+	0,  // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_services_user_proto_init() }
@@ -334,19 +702,92 @@ func file_services_user_proto_init() {
 				return nil
 			}
 		}
+		file_services_user_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*BefriendUserRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_services_user_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*BefriendUserResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_services_user_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UnfriendUserRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_services_user_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UnfriendUserResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_services_user_proto_msgTypes[8].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*HandleFriendInviteRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_services_user_proto_msgTypes[9].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*HandleFriendInviteResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_services_user_proto_rawDesc,
-			NumEnums:      0,
-			NumMessages:   4,
+			NumEnums:      1,
+			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_services_user_proto_goTypes,
 		DependencyIndexes: file_services_user_proto_depIdxs,
+		EnumInfos:         file_services_user_proto_enumTypes,
 		MessageInfos:      file_services_user_proto_msgTypes,
 	}.Build()
 	File_services_user_proto = out.File
