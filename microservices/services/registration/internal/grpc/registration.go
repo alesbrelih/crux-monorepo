@@ -41,6 +41,14 @@ func (s *registrationServiceServer) Register(ctx context.Context, request *servi
 
 	// TODO: send invite email
 
+	type UserInvite struct {
+		Id       string // this will be uid
+		Name     string
+		Surname  string
+		Email    string
+		Username string
+	}
+
 	return &services.RegisterResponse{
 		Uuid: id,
 	}, nil

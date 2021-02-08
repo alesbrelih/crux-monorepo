@@ -118,6 +118,7 @@ func (repo *repositoryPQ) HandleFriendInvite(ctx context.Context, userOne, userT
 	}
 
 	// TODO: rework this -> using different table for invites!
+	// maybe? not sure
 	if isAccepted {
 		return repo.acceptFriendInvite(ctx, conn, id)
 	}

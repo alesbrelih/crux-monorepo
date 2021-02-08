@@ -1,10 +1,13 @@
 proto-buffers:
-	protoc -I protos/src --go_out=./protos protos/src/**/*.proto
+	protoc -I protos/src -I ${GOPATH}/src/ --go_out=./protos protos/src/**/*.proto
 
 proto-go-plugin:
-	protoc -I protos/src --go-grpc_out=./protos protos/src/**/*.proto
+	protoc -I protos/src -I ${GOPATH}/src/ --go-grpc_out=./protos protos/src/**/*.proto
 
-protoc: proto-buffers proto-go-plugin
+proto-go-validators:
+	#include ${GOPATH}/src because we import validators.proto file for govalidators_out
+	protoc -I protos/src -I ${GOPATH}/src/ --govalidators_out=./protos protos/src/**/*.proto
+protoc: proto-buffers proto-go-plugin proto-go-validators
 
 run-authentication:
 	cd services/authentication/;go run main.go

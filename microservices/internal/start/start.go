@@ -7,17 +7,16 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/alesbrelih/crux-monorepo/microservices/config"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
 
-func SetUpGrpc(envConf *config.Enviroment, setUp func(*grpc.Server)) {
+func SetUpGrpc(port string, debug bool, setUp func(*grpc.Server)) {
 
 	// default listener
-	lis, err := net.Listen("tcp", envConf.AppPort)
+	lis, err := net.Listen("tcp", port)
 	if err != nil {
-		log.Fatalf("Failed to listen: '%v' on port '%v'", err, envConf.AppPort)
+		log.Fatalf("Failed to listen: '%v' on port '%v'", err, port)
 	}
 
 	// set grpc server
@@ -25,7 +24,7 @@ func SetUpGrpc(envConf *config.Enviroment, setUp func(*grpc.Server)) {
 
 	// enable reflection on debug
 	// this allows service discovery
-	if envConf.Debug {
+	if debug {
 		reflection.Register(server)
 	}
 

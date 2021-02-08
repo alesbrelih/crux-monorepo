@@ -4,10 +4,10 @@ import (
 	"log"
 	"os"
 
-	envConf "github.com/alesbrelih/crux-monorepo/microservices/config"
 	"github.com/alesbrelih/crux-monorepo/microservices/internal/start"
 	"github.com/alesbrelih/crux-monorepo/microservices/pkg"
 	"github.com/alesbrelih/crux-monorepo/microservices/protos/build/services"
+	"github.com/alesbrelih/crux-monorepo/microservices/services/registration/config"
 	grpcUser "github.com/alesbrelih/crux-monorepo/microservices/services/user/internal/grpc"
 	"github.com/alesbrelih/crux-monorepo/microservices/services/user/internal/repository"
 	"github.com/hashicorp/go-hclog"
@@ -22,15 +22,15 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error getting working directory. Error: %v", err)
 	}
-	envConf := envConf.GetEnvConfig(cwd, "dev.env")
+	config := config.GetEnvConfig(cwd, "dev.env")
 
-	start.SetUpGrpc(envConf, func(server *grpc.Server) {
+	start.SetUpGrpc(config.AppPort, config.Debug, func(server *grpc.Server) {
 
-		repo := repository.NewRepository(envConf.DatabaseUrl)
+		repo := repository.NewRepository(config.DatabaseUrl)
 		passUtil := pkg.NewPasswordUtil()
 		logger := hclog.New(&hclog.LoggerOptions{
 			Name:  "user",
-			Level: hclog.LevelFromString(envConf.LogLevel), // todo set from env
+			Level: hclog.LevelFromString(config.LogLevel), // todo set from env
 		})
 		grpcService := grpcUser.NewUserService(logger, passUtil, repo)
 

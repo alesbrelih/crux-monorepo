@@ -5,9 +5,9 @@ import (
 	"os"
 	"path"
 
-	envConf "github.com/alesbrelih/crux-monorepo/microservices/config"
 	"github.com/alesbrelih/crux-monorepo/microservices/internal/start"
 	"github.com/alesbrelih/crux-monorepo/microservices/protos/build/services"
+	"github.com/alesbrelih/crux-monorepo/microservices/services/authentication/config"
 	grpcAuth "github.com/alesbrelih/crux-monorepo/microservices/services/authentication/internal/grpc"
 	myJwt "github.com/alesbrelih/crux-monorepo/microservices/services/authentication/internal/my_jwt"
 	"github.com/alesbrelih/crux-monorepo/microservices/services/authentication/internal/repository"
@@ -21,17 +21,16 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error getting working directory. Error: %v", err)
 	}
-	envConf := envConf.GetEnvConfig(cwd, "dev.env")
-
-	start.SetUpGrpc(envConf, func(server *grpc.Server) {
+	conf := config.GetEnvConfig(cwd, "dev.env")
+	start.SetUpGrpc(conf.AppPort, conf.Debug, func(server *grpc.Server) {
 		// set repository and migrate db
-		authRepository := repository.NewRepository(envConf.DatabaseUrl)
+		authRepository := repository.NewRepository(conf.DatabaseUrl)
 		err = authRepository.Migrate(path.Join(cwd, "db/migrations"))
 		if err != nil {
 			log.Fatalf("Error migrating DB. Error: %v", err)
 		}
 		// set grpc controller
-		jwtService := myJwt.NewJwtService(envConf.JwtSecret, envConf.JwtAccessExp, envConf.JwtRefreshExt)
+		jwtService := myJwt.NewJwtService(conf.JwtSecret, conf.JwtAccessExp, conf.JwtRefreshExt)
 		grpcService := grpcAuth.NewAuthService(jwtService, authRepository)
 
 		services.RegisterAuthServiceServer(server, grpcService)

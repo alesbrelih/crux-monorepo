@@ -97,7 +97,7 @@ func (s *userServiceServer) BefriendUser(ctx context.Context, request *services.
 	return &services.BefriendUserResponse{}, nil
 }
 
-func (s *userServiceServer) UnfriendUser(ctx context.Context, request *services.UnfriendUserRequest) (*services.UnfiendUserResponse, error) {
+func (s *userServiceServer) UnfriendUser(ctx context.Context, request *services.UnfriendUserRequest) (*services.UnfriendUserResponse, error) {
 
 	currentUserId := "mocked-id" // this will be retrieved from jwt
 

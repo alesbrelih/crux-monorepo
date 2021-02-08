@@ -4,12 +4,11 @@ import (
 	"log"
 	"os"
 
-	"github.com/alesbrelih/crux-monorepo/microservices/internal/grpc_clients"
 	"github.com/alesbrelih/crux-monorepo/microservices/internal/start"
 	"github.com/alesbrelih/crux-monorepo/microservices/protos/build/services"
-	"github.com/alesbrelih/crux-monorepo/microservices/services/authentication/config"
-	grpcRegistration "github.com/alesbrelih/crux-monorepo/microservices/services/registration/internal/grpc"
-	"github.com/alesbrelih/crux-monorepo/microservices/services/registration/internal/repository"
+	grpcService "github.com/alesbrelih/crux-monorepo/microservices/services/mail/internal/grpc"
+	"github.com/alesbrelih/crux-monorepo/microservices/services/mail/internal/repository"
+	"github.com/alesbrelih/crux-monorepo/microservices/services/registration/config"
 	"github.com/hashicorp/go-hclog"
 
 	"google.golang.org/grpc"
@@ -28,13 +27,13 @@ func main() {
 
 		repo := repository.NewRepository(config.DatabaseUrl)
 		logger := hclog.New(&hclog.LoggerOptions{
-			Name:  "registration",
+			Name:  "mail",
 			Level: hclog.LevelFromString(config.LogLevel), // todo set from env
 		})
-		userClient := grpc_clients.NewUserClient("localhost:9010")
-		grpcService := grpcRegistration.NewRegistrationService(logger, repo, userClient)
 
-		services.RegisterRegistrationServiceServer(server, grpcService)
+		grpcService := grpcService.NewMailService(logger, repo)
+
+		services.RegisterMailServiceServer(server, grpcService)
 	})
 
 }

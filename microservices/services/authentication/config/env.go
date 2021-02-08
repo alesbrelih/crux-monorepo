@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-type Enviroment struct {
+type Env struct {
 	Debug         bool          `mapstructure:"DEBUG"`
 	AppPort       string        `mapstructure:"APP_PORT"`
 	DatabaseUrl   string        `mapstructure:"DATABASE_URL"`
@@ -17,11 +17,9 @@ type Enviroment struct {
 	LogLevel      string        `mapstructure:"LOG_LEVEL"`
 }
 
-// TODO: maybe struct embed different types?
-
-func GetEnvConfig(path, file string) *Enviroment {
+func GetEnvConfig(path, file string) *Env {
 	// get enviroment variables
-	var envConf Enviroment
+	var envConf Env
 	viper.SetConfigFile(file)
 	viper.AddConfigPath(path)
 	if err := viper.ReadInConfig(); err != nil {

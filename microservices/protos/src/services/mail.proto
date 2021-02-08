@@ -1,0 +1,71 @@
+syntax="proto3";
+package services;
+option go_package = "build/services";
+
+import "google/protobuf/timestamp.proto";
+import "github.com/mwitkow/go-proto-validators/validator.proto";
+
+// mail status
+enum MailStatus {
+	IN_QUEUE = 0;
+	SENT = 1;
+	ERROR = 2;
+}
+
+// send mail, actually puts it in queue
+message SendMailRequest {
+	string reciever = 1 [(validator.field) = {
+		regex: "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$",
+		human_error: "Invalid reciever"
+	}];
+	string subject = 2 [(validator.field) = {
+		length_gt: 6,
+		human_error: "Subject should be atleast 6 characters long"
+	}];
+	string body = 3 [(validator.field) = {
+		length_gt: 10,
+		human_error: "Body should be atleast 10 characters long"
+	}];
+}
+
+message SendMailResponse {
+	int64 id = 1;
+}
+
+// retrieve single mail
+message GetMailRequest {
+	int64 id = 1 [(validator.field) = {
+		int_gt: 0,
+		human_error: "Invalid ID"
+	}];
+}
+message GetMailResponse {
+	int64 id = 1;
+	string reciever = 2;
+	google.protobuf.Timestamp created_at = 3;
+	MailStatus status = 4;
+}
+
+// retrieve mail filtered by date, reciever
+message GetMailsRequest {
+	google.protobuf.Timestamp from = 1;
+	google.protobuf.Timestamp to = 2;
+	string reciever = 3;
+	MailStatus status = 4;
+}
+
+message GetMailsItem {
+	int64 id = 1;
+	string reciever = 2;
+	google.protobuf.Timestamp created_at = 3;
+	MailStatus status = 4;
+}
+message GetMailsResponse {
+	repeated GetMailsItem items = 1;
+}
+
+service MailService {
+	rpc SendMail(SendMailRequest) returns (SendMailResponse) {}
+	rpc GetMail(GetMailRequest) returns (GetMailResponse) {}
+	rpc GetMails(GetMailsRequest) returns (GetMailsResponse) {}
+}
